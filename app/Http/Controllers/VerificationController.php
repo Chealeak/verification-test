@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VerificationResource;
 use App\Models\Verification;
 use App\Services\Validators\IssuerValidator;
 use App\Services\Validators\RecipientValidator;
 use App\Services\Validators\SignatureValidator;
 use App\Services\Verificator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -28,7 +30,6 @@ use Illuminate\Support\Facades\Auth;
  *     )
  * )
  */
-
 class VerificationController extends Controller
 {
     public function __construct(private readonly Verificator $verificator) {}
@@ -77,7 +78,7 @@ class VerificationController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResource
     {
         $request->validate([
             'file' => 'required|file|mimes:json|max:2048',
@@ -107,11 +108,6 @@ class VerificationController extends Controller
             'verification_result' => $verificationResult->getResult()
         ]);
 
-        return response()->json([
-            'data' => [
-                'issuer' => $verificationResult->getIssuer(),
-                'result' => $verificationResult->getResult()
-            ]
-        ], 200);
+        return VerificationResource::make($verificationResult);
     }
 }
