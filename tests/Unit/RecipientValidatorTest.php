@@ -16,7 +16,7 @@ class RecipientValidatorTest extends TestCase
         $this->validator = new RecipientValidator();
     }
 
-    public function testValidRecipientReturnsValidResult()
+    public function testValidRecipientReturnsValidResult(): void
     {
         $data = [
             'data' => [

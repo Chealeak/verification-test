@@ -16,7 +16,7 @@ class IssuerValidatorTest extends TestCase
         $this->validator = new IssuerValidator();
     }
 
-    public function testValidIssuerReturnsValidResult()
+    public function testValidIssuerReturnsValidResult(): void
     {
         $data = [
             'data' => [

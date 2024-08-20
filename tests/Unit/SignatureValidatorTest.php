@@ -16,7 +16,7 @@ class SignatureValidatorTest extends TestCase
         $this->validator = new SignatureValidator();
     }
 
-    public function testValidSignatureReturnsValidResult()
+    public function testValidSignatureReturnsValidResult(): void
     {
         $data = [
             'data' => [
