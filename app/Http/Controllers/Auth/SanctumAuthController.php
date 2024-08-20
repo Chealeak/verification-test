@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class SanctumAuthController extends Controller
@@ -41,7 +43,7 @@ class SanctumAuthController extends Controller
      *     )
      * )
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $registerUserData = $request->validate([
             'name' => 'required|string',
@@ -55,9 +57,9 @@ class SanctumAuthController extends Controller
             'password' => Hash::make($registerUserData['password']),
         ]);
 
-        return response()->json([
+        return new JsonResponse([
             'message' => 'User Created',
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -89,7 +91,7 @@ class SanctumAuthController extends Controller
      *     )
      * )
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $loginUserData = $request->validate([
             'email' => 'required|string|email',
@@ -105,9 +107,9 @@ class SanctumAuthController extends Controller
         $tokenName = 'AuthToken-' . $user->id;
         $token = $user->createToken($tokenName)->plainTextToken;
 
-        return response()->json([
+        return new JsonResponse([
             'access_token' => $token,
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -125,12 +127,12 @@ class SanctumAuthController extends Controller
      *     )
      * )
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 
-        return response()->json([
+        return new JsonResponse([
             'message' => 'Logged out'
-        ]);
+        ], Response::HTTP_OK);
     }
 }
