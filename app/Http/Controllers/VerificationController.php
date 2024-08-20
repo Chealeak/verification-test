@@ -76,7 +76,7 @@ class VerificationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:json',
+            'file' => 'required|file|mimes:json|max:2048',
         ]);
 
         $file = $request->file('file');
@@ -84,7 +84,7 @@ class VerificationController extends Controller
         $jsonContent = file_get_contents($file->getPathname());
 
         $parsedData = json_decode($jsonContent, true);
-var_dump($parsedData); die;
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             return response()->json([
                 'message' => 'Invalid JSON format.',
