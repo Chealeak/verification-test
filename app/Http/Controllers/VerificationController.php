@@ -10,7 +10,9 @@ use App\Services\Validators\SignatureValidator;
 use App\Services\Verificator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @OA\OpenApi(
@@ -78,7 +80,7 @@ class VerificationController extends Controller
      *     )
      * )
      */
-    public function store(Request $request): JsonResource
+    public function store(Request $request): JsonResource|JsonResponse
     {
         $request->validate([
             'file' => 'required|file|mimes:json|max:2048',
@@ -91,9 +93,9 @@ class VerificationController extends Controller
         $parsedData = json_decode($jsonContent, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return response()->json([
+            return new JsonResponse([
                 'message' => 'Invalid JSON format.',
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $verificationResult = $this->verificator->verify($parsedData, [
