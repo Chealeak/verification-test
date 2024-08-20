@@ -59,9 +59,13 @@ class VerificationController extends Controller
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean"),
-     *             @OA\Property(property="message", type="string")
-     *         ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="issuer", type="string", description="Issuer of the verification result"),
+     *                 @OA\Property(property="result", type="string", description="Result of the verification process")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=400,

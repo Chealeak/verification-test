@@ -19,8 +19,8 @@ class SanctumAuthController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"name", "email", "password"},
-     *             @OA\Property(property="name", type="string", example="John Doe"),
-     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="name", type="string", example="User Name"),
+     *             @OA\Property(property="email", type="string", format="email", example="test@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="password123")
      *         ),
      *     ),
@@ -48,11 +48,13 @@ class SanctumAuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|min:8'
         ]);
+
         User::create([
             'name' => $registerUserData['name'],
             'email' => $registerUserData['email'],
             'password' => Hash::make($registerUserData['password']),
         ]);
+
         return response()->json([
             'message' => 'User Created',
         ]);
@@ -67,7 +69,7 @@ class SanctumAuthController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"email", "password"},
-     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="email", type="string", format="email", example="test@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="password123")
      *         ),
      *     ),
@@ -93,13 +95,16 @@ class SanctumAuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|min:8'
         ]);
+
         $user = User::where('email', $loginUserData['email'])->first();
         if (!$user || !Hash::check($loginUserData['password'], $user->password)) {
             return response()->json([
                 'message' => 'Invalid Credentials'
             ], 401);
         }
-        $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
+        $tokenName = 'AuthToken-' . $user->id;
+        $token = $user->createToken($tokenName)->plainTextToken;
+
         return response()->json([
             'access_token' => $token,
         ]);
@@ -125,7 +130,7 @@ class SanctumAuthController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json([
-            "message" => "logged out"
+            'message' => 'Logged out'
         ]);
     }
 }

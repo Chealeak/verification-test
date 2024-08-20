@@ -26,12 +26,12 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "John Doe"
+                                        "example": "User Name"
                                     },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "john@example.com"
+                                        "example": "test@example.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -107,7 +107,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "john@example.com"
+                                        "example": "test@example.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -222,11 +222,18 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "message": {
-                                            "type": "string"
+                                        "data": {
+                                            "properties": {
+                                                "issuer": {
+                                                    "description": "Issuer of the verification result",
+                                                    "type": "string"
+                                                },
+                                                "result": {
+                                                    "description": "Result of the verification process",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
